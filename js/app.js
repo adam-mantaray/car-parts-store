@@ -183,11 +183,11 @@ function updateCartBadge() {
 // ── Toast ──
 function showToast(msg) {
   const t = document.createElement('div');
-  t.className = 'fixed bottom-6 right-6 bg-blue-600 text-white px-6 py-3 rounded-lg shadow-2xl z-50 transform translate-y-4 opacity-0 transition-all duration-300';
-  t.innerHTML = `<i class="fa-solid fa-check mr-2"></i>${msg}`;
+  t.className = 'toast-gold';
+  t.innerHTML = `<i class="fa-solid fa-check" style="margin-left:8px"></i>${msg}`;
   document.body.appendChild(t);
-  requestAnimationFrame(() => { t.style.opacity = '1'; t.style.transform = 'translateY(0)'; });
-  setTimeout(() => { t.style.opacity = '0'; t.style.transform = 'translateY(1rem)'; setTimeout(() => t.remove(), 300); }, 2500);
+  requestAnimationFrame(() => t.classList.add('show'));
+  setTimeout(() => { t.classList.remove('show'); setTimeout(() => t.remove(), 300); }, 2500);
 }
 
 // ── Format ──

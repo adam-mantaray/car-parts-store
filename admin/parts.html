@@ -1,120 +1,121 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Parts Management | AutoParts Admin</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <title>ادارة القطع - AutoParts EG</title>
+  <link rel="stylesheet" href="../css/style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  <link rel="stylesheet" href="../css/style.css?v=2">
-  <script>tailwind.config={theme:{extend:{colors:{dark:{50:'#e8e8ef',100:'#b0b0c0',200:'#8888a0',300:'#5a5a72',400:'#3a3a4a',500:'#2a2a3a',600:'#1e1e2a',700:'#16161f',800:'#111118',900:'#0a0a0f'},accent:{DEFAULT:'#3b82f6',light:'#60a5fa',dark:'#1d4ed8'}},fontFamily:{sans:['Inter','sans-serif'],cairo:['Cairo','sans-serif']}}}}</script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: { extend: {
+        colors: { dark: { 1: '#1c1c1e', 2: '#2a2a2e', 3: '#333338' }, gold: { DEFAULT: '#c9a96e', light: '#d4b97e', dark: '#b8944f' }, muted: '#9a9a9e' },
+        fontFamily: { cairo: ['Cairo'], inter: ['Inter'], mono: ['JetBrains Mono'] }
+      }}
+    }
+  </script>
 </head>
-<body class="bg-dark-900 text-dark-50">
-  <div class="flex min-h-screen">
-    <aside class="w-64 bg-dark-800 border-r border-dark-500 flex-shrink-0 hidden lg:flex flex-col">
-      <div class="p-6 border-b border-dark-500">
-        <a href="../index.html" class="flex items-center gap-3">
-          <div class="w-9 h-9 rounded-lg bg-gradient-to-br from-accent to-accent-dark flex items-center justify-center"><i class="fa-solid fa-gear text-white"></i></div>
-          <div><div class="font-bold text-sm">AutoParts EG</div><div class="text-[10px] text-dark-400 uppercase tracking-wider">Admin Panel</div></div>
-        </a>
-      </div>
-      <nav class="flex-1 p-4 space-y-1">
-        <a href="index.html" class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-dark-300 hover:bg-dark-700 hover:text-dark-50 transition-colors text-sm"><i class="fa-solid fa-chart-line w-5"></i> Dashboard</a>
-        <a href="parts.html" class="flex items-center gap-3 px-4 py-2.5 rounded-lg bg-accent/10 text-accent-light text-sm font-medium"><i class="fa-solid fa-boxes-stacked w-5"></i> Parts</a>
-        <a href="pricing.html" class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-dark-300 hover:bg-dark-700 hover:text-dark-50 transition-colors text-sm"><i class="fa-solid fa-coins w-5"></i> Pricing</a>
-        <a href="orders.html" class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-dark-300 hover:bg-dark-700 hover:text-dark-50 transition-colors text-sm"><i class="fa-solid fa-receipt w-5"></i> Orders</a>
-      </nav>
-      <div class="p-4 border-t border-dark-500"><a href="../index.html" class="flex items-center gap-3 px-4 py-2 text-sm text-dark-400 hover:text-dark-200 transition-colors"><i class="fa-solid fa-arrow-left w-5"></i> Back to Store</a></div>
-    </aside>
+<body class="bg-dark-1">
+  <aside class="admin-sidebar">
+    <div class="px-6 mb-8">
+      <a href="../index.html" class="flex items-center gap-2">
+        <i class="fa-solid fa-gear text-gold text-xl"></i>
+        <span class="font-cairo text-lg font-bold">AutoParts <span class="text-gold">EG</span></span>
+      </a>
+    </div>
+    <a href="index.html"><i class="fa-solid fa-chart-line"></i><span class="font-cairo">لوحة التحكم</span></a>
+    <a href="parts.html" class="active"><i class="fa-solid fa-boxes-stacked"></i><span class="font-cairo">القطع</span></a>
+    <a href="pricing.html"><i class="fa-solid fa-coins"></i><span class="font-cairo">التسعير</span></a>
+    <a href="orders.html"><i class="fa-solid fa-clipboard-list"></i><span class="font-cairo">الطلبات</span></a>
+  </aside>
 
-    <main class="flex-1 overflow-auto">
-      <header class="h-16 border-b border-dark-500 flex items-center justify-between px-8 bg-dark-800/50">
-        <h1 class="text-lg font-bold">Parts Management</h1>
-        <div class="flex items-center gap-3">
-          <input type="text" id="adminSearch" placeholder="Search parts..." class="bg-dark-700 border border-dark-500 rounded-lg px-4 py-2 text-sm text-dark-50 placeholder-dark-400 focus:border-accent focus:outline-none w-64">
-          <select id="adminCatFilter" class="bg-dark-700 border border-dark-500 rounded-lg px-3 py-2 text-sm text-dark-50 focus:border-accent focus:outline-none">
-            <option value="all">All Categories</option>
-          </select>
-        </div>
-      </header>
+  <div class="admin-content">
+    <div class="flex items-center justify-between mb-8">
+      <h1 class="font-cairo text-3xl font-bold">ادارة القطع</h1>
+      <button onclick="openModal()" class="btn-gold"><i class="fa-solid fa-plus ml-2"></i>اضافة قطعة</button>
+    </div>
 
-      <div class="p-8">
-        <!-- Summary -->
-        <div class="grid grid-cols-3 gap-4 mb-6">
-          <div class="stat-card flex items-center gap-4">
-            <div class="w-10 h-10 rounded-lg bg-blue-500/10 flex items-center justify-center"><i class="fa-solid fa-boxes-stacked text-blue-400"></i></div>
-            <div><div class="text-xl font-bold" id="partCount">0</div><div class="text-xs text-dark-400">Total Parts</div></div>
-          </div>
-          <div class="stat-card flex items-center gap-4">
-            <div class="w-10 h-10 rounded-lg bg-green-500/10 flex items-center justify-center"><i class="fa-solid fa-check text-green-400"></i></div>
-            <div><div class="text-xl font-bold text-green-400" id="inStockCount">0</div><div class="text-xs text-dark-400">In Stock</div></div>
-          </div>
-          <div class="stat-card flex items-center gap-4">
-            <div class="w-10 h-10 rounded-lg bg-yellow-500/10 flex items-center justify-center"><i class="fa-solid fa-database text-yellow-400"></i></div>
-            <div><div class="text-xl font-bold text-yellow-400" id="epcCount">0</div><div class="text-xs text-dark-400">EPC Verified</div></div>
-          </div>
-        </div>
+    <!-- Search -->
+    <div class="mb-6">
+      <input type="text" id="searchParts" placeholder="ابحث بالاسم، رقم OEM..." class="input-dark font-cairo max-w-md">
+    </div>
 
-        <!-- Table -->
-        <div class="card overflow-hidden">
-          <div class="overflow-x-auto">
-            <table class="data-table">
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>OEM Number</th>
-                  <th>Part Name (EN)</th>
-                  <th>Part Name (AR)</th>
-                  <th>Category</th>
-                  <th>USD</th>
-                  <th>EGP</th>
-                  <th>Stock</th>
-                  <th>Source</th>
-                </tr>
-              </thead>
-              <tbody id="partsTableBody"></tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </main>
+    <!-- Table -->
+    <div class="bg-dark-2 rounded-xl border border-dark-3 overflow-x-auto">
+      <table class="table-dark">
+        <thead><tr>
+          <th>#</th><th>OEM</th><th>الاسم (عربي)</th><th>الاسم (انجليزي)</th><th>التصنيف</th><th>USD</th><th>EGP</th><th>الحالة</th><th></th>
+        </tr></thead>
+        <tbody id="partsTable"></tbody>
+      </table>
+    </div>
   </div>
 
-  <script src="../js/app.js?v=2"></script>
+  <!-- Modal -->
+  <div class="modal-overlay" id="partModal">
+    <div class="modal-content">
+      <div class="flex items-center justify-between mb-6">
+        <h3 class="font-cairo text-xl font-bold" id="modalTitle">اضافة قطعة</h3>
+        <button onclick="closeModal()" class="text-muted hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
+      </div>
+      <div class="space-y-4">
+        <input type="text" placeholder="رقم OEM" class="input-dark font-mono" id="mOem">
+        <input type="text" placeholder="الاسم بالعربي" class="input-dark font-cairo" id="mNameAr">
+        <input type="text" placeholder="Name in English" class="input-dark font-inter" id="mNameEn">
+        <select class="input-dark font-cairo" id="mCategory">
+          <option value="">التصنيف</option>
+        </select>
+        <input type="number" placeholder="السعر USD" class="input-dark font-inter" id="mPrice" step="0.01">
+        <input type="text" placeholder="سنوات التوافق" class="input-dark font-inter" id="mYears" value="2014-2021">
+      </div>
+      <button onclick="saveModal()" class="btn-gold w-full mt-6">حفظ</button>
+    </div>
+  </div>
+
+  <script src="../js/app.js"></script>
   <script>
-    const catFilter = document.getElementById('adminCatFilter');
-    CATEGORIES.forEach(c => { catFilter.innerHTML += `<option value="${c.id}">${c.nameEn}</option>`; });
+    // Fill category select
+    const mCat = document.getElementById('mCategory');
+    CATEGORIES.forEach(c => mCat.innerHTML += `<option value="${c.id}">${c.nameAr} - ${c.nameEn}</option>`);
 
-    function renderAdmin() {
-      const search = document.getElementById('adminSearch').value.toLowerCase();
-      const cat = catFilter.value;
-      let parts = [...PARTS];
-      if (cat !== 'all') parts = parts.filter(p => p.category === cat);
-      if (search) parts = parts.filter(p => p.oem.toLowerCase().includes(search) || p.nameEn.toLowerCase().includes(search) || p.nameAr.includes(search));
-
-      document.getElementById('partCount').textContent = parts.length;
-      document.getElementById('inStockCount').textContent = parts.filter(p => p.inStock).length;
-      document.getElementById('epcCount').textContent = parts.filter(p => p.scraped).length;
-
-      document.getElementById('partsTableBody').innerHTML = parts.map(p => {
-        const c = CATEGORIES.find(x => x.id === p.category);
+    function renderTable() {
+      const q = document.getElementById('searchParts').value.toLowerCase();
+      const filtered = PARTS.filter(p => !q || p.nameAr.includes(q) || p.nameEn.toLowerCase().includes(q) || p.oem.toLowerCase().includes(q));
+      document.getElementById('partsTable').innerHTML = filtered.map(p => {
+        const cat = CATEGORIES.find(c => c.id === p.category);
         return `<tr>
-          <td class="text-dark-400 text-xs">${p.id}</td>
-          <td><span class="oem-badge">${p.oem}</span></td>
-          <td class="text-sm">${p.nameEn}</td>
-          <td class="font-cairo text-sm text-dark-300">${p.nameAr}</td>
-          <td class="text-xs text-dark-300">${c ? c.nameEn : ''}</td>
-          <td class="text-dark-300">${fmtUSD(p.priceUsd)}</td>
-          <td class="font-semibold">${fmtEGP(p.priceEgp)}</td>
-          <td><span class="stock-dot ${p.inStock ? 'in-stock' : 'out-of-stock'}"></span></td>
-          <td>${p.scraped ? '<span class="text-green-400 text-xs"><i class="fa-solid fa-check-circle"></i></span>' : '<span class="text-dark-500 text-xs"><i class="fa-solid fa-minus"></i></span>'}</td>
+          <td class="text-muted">${p.id}</td>
+          <td class="font-mono text-gold text-xs">${p.oem}</td>
+          <td class="font-cairo">${p.nameAr}</td>
+          <td class="font-inter text-muted text-sm">${p.nameEn}</td>
+          <td class="font-cairo text-sm">${cat?.nameAr || ''}</td>
+          <td class="font-inter text-sm">${fmtUSD(p.priceUsd)}</td>
+          <td class="price-gold text-base">${fmtEGP(p.priceEgp)}</td>
+          <td>${p.inStock ? '<span class="badge badge-success">متوفر</span>' : '<span class="badge badge-error">نفذ</span>'}</td>
+          <td><button onclick="editPart(${p.id})" class="text-gold hover:text-gold-light"><i class="fa-solid fa-pen"></i></button></td>
         </tr>`;
       }).join('');
     }
 
-    document.getElementById('adminSearch').addEventListener('input', renderAdmin);
-    catFilter.addEventListener('change', renderAdmin);
-    renderAdmin();
+    document.getElementById('searchParts').addEventListener('input', renderTable);
+    renderTable();
+
+    function openModal() { document.getElementById('partModal').classList.add('show'); document.getElementById('modalTitle').textContent = 'اضافة قطعة'; }
+    function closeModal() { document.getElementById('partModal').classList.remove('show'); }
+    function editPart(id) {
+      const p = PARTS.find(x => x.id === id);
+      if (!p) return;
+      document.getElementById('mOem').value = p.oem;
+      document.getElementById('mNameAr').value = p.nameAr;
+      document.getElementById('mNameEn').value = p.nameEn;
+      document.getElementById('mCategory').value = p.category;
+      document.getElementById('mPrice').value = p.priceUsd;
+      document.getElementById('mYears').value = p.years;
+      document.getElementById('modalTitle').textContent = 'تعديل قطعة #' + id;
+      openModal();
+    }
+    function saveModal() { showToast('تم الحفظ'); closeModal(); }
   </script>
 </body>
 </html>
