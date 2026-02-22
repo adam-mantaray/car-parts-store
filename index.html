@@ -78,24 +78,27 @@
           ابحث بموديل عربيتك
         </h2>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <select class="input-dark font-cairo text-lg" id="selBrand">
+          <select class="input-dark font-cairo text-lg" id="selBrand" onchange="updateModels()">
             <option value="">الماركة</option>
-            <option value="Mercedes-Benz" selected>Mercedes-Benz</option>
+            <option value="Mercedes-Benz">Mercedes-Benz</option>
+            <option value="BMW">BMW</option>
           </select>
           <select class="input-dark font-cairo text-lg" id="selModel">
             <option value="">الموديل</option>
-            <option value="C-Class" selected>C-Class (W205)</option>
+            <option value="C-Class" data-brand="Mercedes-Benz">C-Class (W205)</option>
+            <option value="3-Series" data-brand="BMW">3-Series (F30)</option>
           </select>
           <select class="input-dark font-cairo text-lg" id="selYear">
             <option value="">السنة</option>
-            <option>2014</option><option>2015</option><option>2016</option><option>2017</option>
-            <option>2018</option><option>2019</option><option>2020</option><option>2021</option>
+            <option>2012</option><option>2013</option><option>2014</option><option>2015</option>
+            <option>2016</option><option>2017</option><option>2018</option><option>2019</option>
+            <option>2020</option><option>2021</option>
           </select>
         </div>
         <div class="text-center mt-6">
-          <a href="catalog.html" class="btn-gold px-10 py-3 inline-block">
+          <button onclick="goToCatalog()" class="btn-gold px-10 py-3 inline-block">
             <i class="fa-solid fa-search ml-2"></i>عرض القطع
-          </a>
+          </button>
         </div>
       </div>
     </div>
@@ -207,6 +210,28 @@
           <span class="badge badge-gold mt-2">${count} قطعة</span>
         </a>`;
     });
+
+    // Brand/Model selector
+    function updateModels() {
+      const brand = document.getElementById('selBrand').value;
+      const modelSel = document.getElementById('selModel');
+      Array.from(modelSel.options).forEach(opt => {
+        if (!opt.value) return;
+        opt.style.display = (!brand || opt.dataset.brand === brand) ? '' : 'none';
+      });
+      // Reset model if current selection doesn't match brand
+      const curr = modelSel.options[modelSel.selectedIndex];
+      if (curr.value && brand && curr.dataset.brand !== brand) modelSel.value = '';
+    }
+
+    function goToCatalog() {
+      const brand = document.getElementById('selBrand').value;
+      const model = document.getElementById('selModel').value;
+      const params = new URLSearchParams();
+      if (brand) params.set('brand', brand);
+      if (model) params.set('model', model);
+      window.location.href = 'catalog.html' + (params.toString() ? '?' + params.toString() : '');
+    }
 
     // Featured (top 6 by price)
     const featured = [...PARTS].sort((a,b) => b.priceUsd - a.priceUsd).slice(0, 6);

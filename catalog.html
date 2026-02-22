@@ -47,6 +47,9 @@
               <i class="fa-solid fa-search absolute left-3 top-1/2 -translate-y-1/2 text-muted"></i>
             </div>
           </div>
+          <!-- Brand filter -->
+          <h3 class="font-cairo text-lg font-bold mb-3">الماركة</h3>
+          <div class="flex flex-wrap gap-2 mb-6" id="brandFilter"></div>
           <!-- Categories -->
           <h3 class="font-cairo text-lg font-bold mb-4">التصنيفات</h3>
           <div class="flex flex-col gap-1" id="catFilter"></div>
@@ -74,7 +77,28 @@
 
   <script src="js/app.js"></script>
   <script>
-    let activeCat = new URLSearchParams(location.search).get('cat') || '';
+    const _params  = new URLSearchParams(location.search);
+    let activeCat  = _params.get('cat')   || '';
+    let activeBrand = _params.get('brand') || '';
+
+    // Brand pills (top of sidebar)
+    const brandFilter = document.getElementById('brandFilter');
+    if (brandFilter) {
+      const brands = [...new Set(PARTS.map(p => p.brand))];
+      brandFilter.innerHTML = `<button onclick="filterBrand('')" class="brand-btn font-inter text-xs py-1 px-3 rounded-full border transition-all ${!activeBrand ? 'border-gold text-gold' : 'border-dark-3 text-muted hover:border-gold/50'}">الكل</button>`;
+      brands.forEach(b => {
+        brandFilter.innerHTML += `<button onclick="filterBrand('${b}')" class="brand-btn font-inter text-xs py-1 px-3 rounded-full border transition-all ${activeBrand === b ? 'border-gold text-gold' : 'border-dark-3 text-muted hover:border-gold/50'}">${b}</button>`;
+      });
+    }
+
+    function filterBrand(brand) {
+      activeBrand = brand;
+      document.querySelectorAll('.brand-btn').forEach((btn, i) => {
+        const isActive = (i === 0 && !brand) || btn.textContent === brand;
+        btn.className = `brand-btn font-inter text-xs py-1 px-3 rounded-full border transition-all ${isActive ? 'border-gold text-gold' : 'border-dark-3 text-muted hover:border-gold/50'}`;
+      });
+      renderParts();
+    }
 
     // Build category filter
     const catFilter = document.getElementById('catFilter');
@@ -101,7 +125,8 @@
       const q = document.getElementById('searchInput').value.toLowerCase();
       const sort = document.getElementById('sortSelect').value;
       let filtered = PARTS.filter(p => {
-        if (activeCat && p.category !== activeCat) return false;
+        if (activeCat   && p.category !== activeCat)   return false;
+        if (activeBrand && p.brand    !== activeBrand)  return false;
         if (q && !p.nameAr.includes(q) && !p.nameEn.toLowerCase().includes(q) && !p.oem.toLowerCase().includes(q)) return false;
         return true;
       });
@@ -119,8 +144,12 @@
             <i class="fa-solid fa-image text-3xl text-dark-3"></i>
           </div>
           <div class="p-5">
-            <a href="part.html?id=${p.id}" class="font-cairo text-lg font-bold hover:text-gold transition-colors block mb-1">${p.nameAr}</a>
+            <div class="flex items-start justify-between mb-1">
+              <a href="part.html?id=${p.id}" class="font-cairo text-lg font-bold hover:text-gold transition-colors block">${p.nameAr}</a>
+              <span class="font-inter text-xs px-2 py-0.5 rounded-full border ${p.brand==='BMW' ? 'border-blue-500/50 text-blue-400' : 'border-gold/30 text-gold/60'} shrink-0 ml-2">${p.brand}</span>
+            </div>
             <p class="text-muted text-sm font-inter">${p.nameEn}</p>
+            <p class="font-mono text-xs text-muted mt-1 font-inter">${p.chassis} · ${p.years}</p>
             <p class="font-mono text-xs text-gold/60 mt-2 bg-dark-2 inline-block px-2 py-1 rounded">${p.oem}</p>
             <div class="flex items-center justify-between mt-4">
               <span class="price-gold">${fmtEGP(p.priceEgp)}</span>
