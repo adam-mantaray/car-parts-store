@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(dir:*)",
+      "Bash(npm install:*)",
+      "Bash(npm view @mantaray-digital/store-sdk)",
+      "Bash(npm ci:*)",
+      "Bash(taskkill:*)",
+      "Bash(cmd /c \"taskkill /F /IM node.exe\")",
+      "Bash(cmd /c \"tasklist | findstr node\")",
+      "Bash(node --input-type=module:*)"
+    ],
+    "additionalDirectories": [
+      "e:\\Work\\car-parts-store\\storefront\\app\\order"
+    ]
+  }
+}
